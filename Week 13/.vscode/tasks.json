@@ -1,0 +1,14 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run notebook all cells via script",
+			"type": "shell",
+			"command": ".venv/bin/python",
+			"args": [
+				"run_notebook_all.py"
+			],
+			"isBackground": false
+		}
+	]
+}

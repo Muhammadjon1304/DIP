@@ -1,0 +1,71 @@
+BizLink Multilingual / Canonical / SEO Work Report
+Date: 2026-04-19
+
+1) Localization model + API
+- Added shared localization model with deterministic fallback behavior and publish-field validation.
+  - app/src/lib/business-localization.ts
+- Added localization API endpoints:
+  - app/src/app/api/business/[businessId]/localization/route.ts
+  - app/src/app/api/business/[businessId]/localizations/route.ts
+  - app/src/app/api/business/[businessId]/localizations/[language]/route.ts
+- Added frontend API client:
+  - app/src/lib/api/business-localization-client.ts
+
+2) Frontend rendering parity (single structure source)
+- Added single source of truth for business page sections and ordering:
+  - app/src/lib/business-page-sections.ts
+- Added structure parity tests:
+  - app/src/lib/business-page-sections.test.ts
+- Updated business page rendering to use shared section visibility map:
+  - app/src/app/[locale]/[slug]/page.tsx
+
+3) Directionality (RTL-safe foundations)
+- Added locale direction helpers:
+  - app/src/lib/utils.ts
+- Applied document dir at root layout:
+  - app/src/app/layout.tsx
+- Updated mobile menu behavior for RTL-safe slide direction:
+  - app/src/components/layout/mobile-menu.tsx
+
+4) Language switcher UX
+- Improved labels and persistence behavior (URL + local storage), reduced layout shift, safer alignment:
+  - app/src/components/layout/language-switcher.tsx
+
+5) Canonical slug and collision guardrails
+- Added slug normalization and candidate generation helpers:
+  - app/src/lib/business-slug.ts
+- Updated business creation flow to reject canonical collisions (no auto-suffixing):
+  - app/src/lib/business-creation.ts
+- Added collision validation on localization updates with explicit 409 responses:
+  - app/src/app/api/business/[businessId]/localizations/[language]/route.ts
+
+6) SEO canonical + hreflang
+- Added locale-aware alternates helper for available localizations + x-default:
+  - app/src/lib/seo.ts
+- Updated business page metadata generation:
+  - canonical points to canonical locale URL
+  - alternates include only available localization URLs + x-default
+  - app/src/app/[locale]/[slug]/page.tsx
+- Added SEO alternates unit tests:
+  - app/src/lib/seo-alternates.test.ts
+
+7) Tests added/updated
+- app/src/lib/business-localization.test.ts
+- app/src/lib/business-page-sections.test.ts
+- app/src/lib/seo-alternates.test.ts
+- app/src/lib/business-slug.test.ts
+
+8) Documentation delivered
+- Localization rendering rules:
+  - docs/localization-rendering-rules.md
+- Canonical schema + ERD-style draft + migration notes:
+  - docs/canonical-schema-and-slug-strategy.md
+
+9) Validation status
+- Targeted test run completed successfully:
+  - 4 files passed
+  - 11 tests passed
+
+10) Notes
+- Dev server must be started from app workspace context (or with npm --prefix app).
+- Root-level npm run dev previously failed due package resolution path mismatch.
